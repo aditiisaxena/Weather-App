@@ -8,6 +8,7 @@ import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -19,7 +20,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -39,7 +42,12 @@ class SavedCities : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            SavedCitiesScreen()
+            Surface(
+                color = Color(0xFF070F2B),
+                modifier = Modifier.fillMaxSize().background(Color(0xFF070F2B))
+            ) {
+                SavedCitiesScreen()
+            }
         }
     }
     private fun sendBack(location: String, latitude: Double, longitude: Double) {
@@ -70,6 +78,7 @@ class SavedCities : ComponentActivity() {
 
         Scaffold(
             modifier = Modifier.fillMaxSize(),
+            containerColor = Color(0xFF070F2B),
             bottomBar = {
                 Box(
                     modifier = Modifier
@@ -78,7 +87,8 @@ class SavedCities : ComponentActivity() {
                     contentAlignment = Alignment.BottomEnd
                 ) {
                     Button(
-                        onClick = { showDialog.value = true }
+                        onClick = { showDialog.value = true },
+                        colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF9290C3))
                     ) {
                         Text(text = "Add City")
                     }
@@ -99,7 +109,8 @@ class SavedCities : ComponentActivity() {
                     Text(
                         text = "Saved Cities",
                         fontSize = 24.sp,
-                        fontWeight = FontWeight.Bold
+                        fontWeight = FontWeight.Bold,
+                        color = Color.White,
                     )
                 }
                 SavedCitiesList(locations = locations)
@@ -175,8 +186,8 @@ class SavedCities : ComponentActivity() {
                     if (jsonArray.size() > 0) {
                         val firstResult = jsonArray.get(0).asJsonObject
                         val boundingbox = firstResult.getAsJsonArray("boundingbox")
-                        val latitude = (boundingbox.get(0).asDouble + boundingbox.get(2).asDouble) / 2
-                        val longitude = (boundingbox.get(1).asDouble + boundingbox.get(3).asDouble) / 2
+                        val latitude = boundingbox.get(0).asDouble
+                        val longitude = boundingbox.get(2).asDouble
 
                         withContext(Dispatchers.Main) {
                             callback(latitude, longitude)
@@ -196,7 +207,7 @@ class SavedCities : ComponentActivity() {
     fun SavedCitiesList(locations: MutableState<MutableList<LocationData>>) {
         LazyColumn(
             modifier = Modifier.fillMaxSize(),
-            verticalArrangement = Arrangement.spacedBy(16.dp)
+            verticalArrangement = Arrangement.spacedBy(16.dp),
         ) {
             items(items = locations.value, key = { it.id.hashCode() }) { location ->
                 Card(
@@ -208,7 +219,7 @@ class SavedCities : ComponentActivity() {
                             sendBack(location.location, location.latitude, location.longitude)
                         },
                     colors = CardDefaults.cardColors(
-                        containerColor = MaterialTheme.colorScheme.surfaceVariant
+                        containerColor = Color(0xFF9290C3),
                     )
                 ) {
                     Box(
@@ -216,9 +227,12 @@ class SavedCities : ComponentActivity() {
                         contentAlignment = Alignment.CenterStart
                     ) {
                         Text(
-                            text = "${location.location}",
+                            text = location.location,
                             modifier = Modifier.padding(16.dp),
-                            fontSize = 20.sp
+                            fontSize = 20.sp,
+                            color = Color(0xFF070F2B),
+                            fontWeight = FontWeight.Medium,
+                            fontFamily = FontFamily.SansSerif
                         )
                     }
                 }

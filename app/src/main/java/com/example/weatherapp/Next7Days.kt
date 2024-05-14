@@ -70,7 +70,7 @@ fun Test(weeklyApi: WeeklyApi, text: String, lat: Double, long: Double, isCelsiu
             List(weatherTest = weatherTest!!, isCelsius = isCelsius, conversionFactor = conversionFactor)
         }
     }
-    LaunchedEffect(text) {
+    LaunchedEffect(lat, long) {
         try {
             val response = weeklyApi.getWeeklyWeather(
                 lat,

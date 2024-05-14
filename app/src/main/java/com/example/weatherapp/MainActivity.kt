@@ -312,9 +312,12 @@ fun WeatherScreen(
     ) {
         item {
             if (locationName == ""){
-                val cd = data?.address?.city
+                var cd = data?.address?.city.toString()
+                if (cd == "null") {
+                    cd = "Loading..."
+                }
                 Text(
-                    text = cd.toString(),
+                    text = cd,
                     modifier = Modifier.padding(start = 8.dp),
                     color = Color(0xFFD3D3D3),
                     fontFamily = FontFamily.SansSerif,
@@ -331,6 +334,7 @@ fun WeatherScreen(
                     fontWeight = FontWeight.Bold,
                     fontSize = 40.sp
                 )
+
             }
         }
         if (weatherData == null && errorMessage == null){
@@ -345,6 +349,7 @@ fun WeatherScreen(
                     fontSize = 10.sp,
                     fontFamily = FontFamily.SansSerif
                 )
+                YCharts(viewModel, isCelsius, conversionFactor)
             }
         } else {
             val currentData = weatherData!!.current
@@ -412,7 +417,7 @@ fun WeatherScreen(
             }
         }
     }
-    LaunchedEffect(location) {
+    LaunchedEffect(lat, long) {
         try {
             val response = weatherApi.getWeather(
                 latitude = lat,
@@ -430,7 +435,7 @@ fun WeatherScreen(
             errorMessage = "Error: ${e.message}"
         }
     }
-    LaunchedEffect("2") {
+    LaunchedEffect(lat, long) {
         try {
             val response = service.reverseGeocode(
                 latitude = lat,

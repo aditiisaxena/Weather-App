@@ -50,7 +50,7 @@ fun DisplayGraph(viewModel: PastViewModel, pastMonthlyApi: PastMonthlyApi, text:
         }
         YCharts(viewModel, isCelsius, conversionFactor)
     }
-    LaunchedEffect(text) {
+    LaunchedEffect(lat, long) {
         try {
             val response = pastMonthlyApi.getPastData(
                 lat,

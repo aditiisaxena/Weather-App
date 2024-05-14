@@ -214,7 +214,7 @@ fun FeatureGrids(lat: Double,
             }
         }
     }
-    LaunchedEffect(lol) {
+    LaunchedEffect(lat, long) {
         try {
             val response = otherStuffApi.getOtherStuff(
                 latitude = lat,

@@ -7,7 +7,6 @@ import android.database.sqlite.SQLiteOpenHelper
 
 class DatabaseHelper(context: Context) :
     SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
-
     companion object {
         private const val DATABASE_NAME = "locations.db"
         private const val DATABASE_VERSION = 1
@@ -17,18 +16,15 @@ class DatabaseHelper(context: Context) :
         private const val COLUMN_LATITUDE = "latitude"
         private const val COLUMN_LONGITUDE = "longitude"
     }
-
     override fun onCreate(db: SQLiteDatabase) {
         val createTableQuery =
             "CREATE TABLE $TABLE_NAME ($COLUMN_ID INTEGER PRIMARY KEY AUTOINCREMENT, $COLUMN_LOCATION TEXT, $COLUMN_LATITUDE REAL, $COLUMN_LONGITUDE REAL)"
         db.execSQL(createTableQuery)
     }
-
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
         db.execSQL("DROP TABLE IF EXISTS $TABLE_NAME")
         onCreate(db)
     }
-
     fun addLocation(location: String, latitude: Double, longitude: Double) {
         val db = writableDatabase
         val values = ContentValues().apply {
